@@ -2,7 +2,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from decouple import config
 
-from api import get_league_teams
+from api import get_league_teams, get_points_per_position_per_week
 
 app = FastAPI()
 
@@ -16,10 +16,13 @@ app.add_middleware(
 )
 
 @app.get("/")
-def get_root():
+async def get_root():
     return {config('YEAR')}
 
 @app.get("/teams")
-def get_teams():
+async def get_teams():
     return get_league_teams()
 
+@app.get("/points_per_position/{team_id}")
+async def get_points_per_position(team_id):
+    return get_points_per_position_per_week(team_id)

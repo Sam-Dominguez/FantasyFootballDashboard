@@ -1,15 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './index.css';
 import App from './App.tsx';
 import reportWebVitals from './reportWebVitals.ts';
+import { BrowserRouter } from "react-router-dom"
+import { TeamProvider } from './components/TeamContext.tsx';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+        <TeamProvider>
+          <App />
+        </TeamProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

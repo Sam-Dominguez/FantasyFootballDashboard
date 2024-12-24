@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './index.css'
 import './App.css';
 import axios from "axios"
 
@@ -10,8 +11,8 @@ function App() {
    useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/");
-        console.log(JSON.stringify(response))
+        const response = await axios.get("http://127.0.0.1:8000/teams");
+        console.log(response)
         setItem(JSON.stringify(response.data));
       } catch (error) {
         console.error("Error fetching items:", error);

@@ -9,7 +9,7 @@ class EspnAPI(object):
 
     def __new__(self):
         if self._instance is None:
-            print('Creating the object')
+            print('Creating espn api object')
             self._instance = super(EspnAPI, self).__new__(self)
             
             self.league = League(

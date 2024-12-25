@@ -1,10 +1,18 @@
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
-from decouple import config
+from .database.database import Database
 
-from api import get_league_teams, get_points_per_position_per_week
+from .api import get_league_teams, get_points_per_position_per_week, test_db
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load the database
+    db = Database()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 # Add CORS middleware
 app.add_middleware(
@@ -17,7 +25,7 @@ app.add_middleware(
 
 @app.get("/")
 async def get_root():
-    return {config('YEAR')}
+    return test_db()
 
 @app.get("/teams")
 async def get_teams():

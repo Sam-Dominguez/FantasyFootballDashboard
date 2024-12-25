@@ -1,7 +1,11 @@
+from datetime import datetime
 from fastapi import HTTPException
-from handlers.espn_api import EspnAPI
-from espn_api.football import Team, BoxScore, BoxPlayer
 
+from .models.models import Team
+
+from .database.database import Database
+from .handlers.espn_api import EspnAPI
+from espn_api.football import BoxScore, BoxPlayer
 
 def get_league_teams():
     espn_api = EspnAPI()
@@ -52,4 +56,6 @@ def get_team_lineup_from_boxscores(box_scores : list[BoxScore], team_id) -> list
         raise HTTPException(status_code=404, detail=f'Matchup for Team with ID {team_id} not found')
     
     return lineup
-        
+
+def test_db():
+    Database().save(Team(created_at=datetime.now(), year=2024, team_id=1, name='Sams Team'))

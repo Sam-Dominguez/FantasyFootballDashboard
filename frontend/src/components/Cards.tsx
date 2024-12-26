@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Dash() {
+function Cards() {
 
   return (
     <div className='container'>
@@ -19,9 +19,9 @@ function Dash() {
             <div className='col'>
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Average Draft Position vs Production</h5>
-                            <p className="card-text">Comparison of ADP versus Point Production.</p>
-                        <a href="#" className="btn btn-primary">Go somewhere</a>
+                            <h5 className="card-title">Points Left on Bench</h5>
+                            <p className="card-text">League-wide analysis of points left on bench each week</p>
+                            <Link to="/points-on-bench" className="btn btn-primary">Open</Link>
                         </div>
                     </div>
             </div>
@@ -30,4 +30,4 @@ function Dash() {
   );
 }
 
-export default Dash;
+export default Cards;

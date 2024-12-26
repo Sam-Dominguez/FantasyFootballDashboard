@@ -4,6 +4,10 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 interface TeamContextType {
   selectedTeamId: string;
   setSelectedTeamId: (id: string) => void;
+  selectedTeamName: string;
+  setSelectedTeamName: (team_name: string) => void;
+  loading: boolean;
+  setLoading : (loading: boolean) => void;
 }
 
 // Define the type for the props of TeamProvider, including the children prop
@@ -16,9 +20,11 @@ const TeamContext = createContext<TeamContextType | undefined>(undefined);
 
 export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [selectedTeamId, setSelectedTeamId] = useState<string>("__");
+  const [selectedTeamName, setSelectedTeamName] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   return (
-    <TeamContext.Provider value={{ selectedTeamId, setSelectedTeamId }}>
+    <TeamContext.Provider value={{ selectedTeamId, setSelectedTeamId, selectedTeamName, setSelectedTeamName, loading, setLoading}}>
       {children}
     </TeamContext.Provider>
   );

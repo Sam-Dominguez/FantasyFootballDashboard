@@ -6,11 +6,10 @@ import { useTeamContext } from './TeamContext.tsx';
 function Header() {
     const [teams, setTeams] = useState<string[]>([]);
 
-    const { setSelectedTeamId } = useTeamContext();
+    const { setSelectedTeamId, loading, setSelectedTeamName } = useTeamContext();
 
     useEffect(() => {
         const fetchTeams = async () => {
-            console.log('Fetching teams');
             try {
                 const response = await axios.get("http://127.0.0.1:8000/teams");
                 setTeams(response.data);
@@ -31,6 +30,7 @@ function Header() {
 
     const handleTeamChange = (event) => {
         setSelectedTeamId(event.target.value); // Update the selected team_id in context
+        setSelectedTeamName(teams[event.target.value]);
     };
 
     // Define the routes where the select element should appear
@@ -44,7 +44,7 @@ function Header() {
             <div className='col-4' />
             <div className='col-4'>
                 {showSelectOnRoutes.includes(location.pathname) && (
-                    <select className="form-select" onChange={handleTeamChange}>
+                    <select className="form-select" onChange={handleTeamChange} disabled={loading}>
                         <option value="__" selected>
                             - Whole League -
                         </option>

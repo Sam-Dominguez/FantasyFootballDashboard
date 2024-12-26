@@ -1,5 +1,8 @@
 from datetime import datetime
+from functools import cache
 from fastapi import HTTPException
+
+from backend.helpers.ttl_cache import ttl_cache
 
 from .models.models import Team
 
@@ -7,12 +10,16 @@ from .database.database import Database
 from .handlers.espn_api import EspnAPI
 from espn_api.football import BoxScore, BoxPlayer
 
+SECONDS_IN_A_DAY = 60 * 60 * 24
+
+@ttl_cache(SECONDS_IN_A_DAY)
 def get_league_teams():
     espn_api = EspnAPI()
     league_teams = espn_api.get_league_teams()
     league_team_id_and_name = {team.team_id : team.team_name.strip() for team in league_teams}
     return league_team_id_and_name
 
+@ttl_cache(SECONDS_IN_A_DAY)
 def get_points_per_position_per_week(team_id):
     espn_api = EspnAPI()
 
@@ -25,7 +32,7 @@ def get_points_per_position_per_week(team_id):
         points_per_position_per_week = {}
 
         box_scores = espn_api.get_week_box_score(week)
-        lineup = get_team_lineup_from_boxscores(box_scores, team_id)
+        lineup = get_team_lineup_from_boxscores(tuple(box_scores), team_id)
         
         for player in lineup:
             points_per_position_per_week[player.position] = round(points_per_position_per_week.get(player.position, 0) + player.points, 2)
@@ -35,8 +42,8 @@ def get_points_per_position_per_week(team_id):
 
     return points_per_position
 
-def get_team_lineup_from_boxscores(box_scores : list[BoxScore], team_id) -> list[BoxPlayer]:
-
+@cache
+def get_team_lineup_from_boxscores(box_scores : tuple[BoxScore], team_id) -> list[BoxPlayer]:
     lineup = None
 
     try:

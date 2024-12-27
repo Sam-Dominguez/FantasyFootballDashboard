@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from .database.database import Database
 
-from .api import get_league_teams, get_points_per_position_per_week, test_db
+from .api import league_teams, points_per_position_per_week, test_db, points_on_bench
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,10 +27,14 @@ app.add_middleware(
 async def get_root():
     return test_db()
 
-@app.get("/teams")
+@app.get('/teams')
 async def get_teams():
-    return get_league_teams()
+    return league_teams()
 
-@app.get("/points_per_position/{team_id}")
+@app.get('/points_per_position/{team_id}')
 async def get_points_per_position(team_id):
-    return get_points_per_position_per_week(team_id)
+    return points_per_position_per_week(team_id)
+
+@app.get('/points_on_bench')
+async def get_points_on_bench():
+    return points_on_bench()

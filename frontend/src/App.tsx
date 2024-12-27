@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import Dash from './components/Cards.tsx';
 import { TeamProvider } from './components/TeamContext.tsx';
 import PointsPerPosition from './components/PointsPerPosition.tsx';
+import PointsOnBench from './components/PointsOnBench.tsx';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dash />} />
             <Route path="/points-per-position" element={<PointsPerPosition />} />
+            <Route path="/points-on-bench" element={<PointsOnBench />} />
           </Routes>
         </div>
       </div>

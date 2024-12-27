@@ -101,3 +101,8 @@ def points_on_bench_for_lineup(lineup : tuple[BoxPlayer]):
             points += player.points
     
     return points
+
+@ttl_cache(SECONDS_IN_A_DAY)
+def win_percentages():
+    league_teams = EspnAPI().get_league_teams()
+    return {team.team_id : round(team.wins / (team.losses + team.wins), 3) for team in league_teams}

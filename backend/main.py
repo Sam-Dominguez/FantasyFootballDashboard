@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+from fastapi.testclient import TestClient
 from .database.database import Database
 
-from .api import league_teams, points_per_position_per_week, test_db, points_on_bench
+from .api import league_teams, points_per_position_per_week, test_db, points_on_bench, win_percentages
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,7 +26,7 @@ app.add_middleware(
 
 @app.get("/")
 async def get_root():
-    return test_db()
+    return {"msg": "Hello World"}
 
 @app.get('/teams')
 async def get_teams():
@@ -38,3 +39,15 @@ async def get_points_per_position(team_id):
 @app.get('/points_on_bench')
 async def get_points_on_bench():
     return points_on_bench()
+
+@app.get('/win_percentages')
+async def get_win_percentages():
+    return win_percentages()
+
+client = TestClient(app)
+
+
+def test_read_main():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello World"}
